@@ -1,0 +1,27 @@
+#:kivy 1.10.1
+
+<HomeModal>:
+    count_down: count_down
+
+    Image:
+        size_hint: None, None
+        size: 340, 200
+        source: 'assets/homemodal.png'
+        allow_stretch: True
+
+        Label:
+            size_hint: None, None
+            size: 263, 50
+            pos: self.parent.x + 38, self.parent.y + 99
+            text: 'Please click on any area of the \n screen to continue.'
+            color: .21, .21, .25, 1
+            font_size: 18
+
+        Label:
+            id: count_down
+            size_hint: None, None
+            size: 25, 20
+            pos: self.parent.x + 157, self.parent.y + 36
+            text: '10s'
+            color: 1, .44, .35, 1
+            font_size: 15

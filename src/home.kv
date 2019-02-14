@@ -1,0 +1,82 @@
+#:kivy 1.10.1
+
+<Home>:
+    Button:
+        size_hint: None, None
+        center_x: self.parent.width / 2 - (self.width + 20)
+        center_y: self.parent.height / 2
+        background_color: .2, .39, .82, 1
+        size: 175, 175
+        background_normal: ''
+        on_press: root.manager.current = 'qrguide'
+
+        RelativeLayout:
+            pos: self.parent.pos
+            size: self.parent.size
+
+            Image:
+                size_hint: None, None
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                size: 43, 43
+                source: 'assets/qrcode.png'
+            Label:
+                pos_hint: {'center_x': .5}
+                top: 48
+                text: 'QR Code'
+                font_size: 18
+
+    Button:
+        size_hint: None, None
+        center_x: self.parent.width / 2
+        center_y: self.parent.height / 2
+        background_color: .22, .77, .44, 1
+        size: 175, 175
+        background_normal: ''
+        on_press: root.manager.current = 'bookingcode'
+
+        RelativeLayout:
+            pos: self.parent.pos
+            size: self.parent.size
+
+            Image:
+                size_hint: None, None
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                size: 56, 43
+                source: 'assets/code.png'
+            Label:
+                pos_hint: {'center_x': .5}
+                top: 48
+                text: 'Booking Number'
+                font_size: 18
+
+    Button:
+        size_hint: None, None
+        center_x: self.parent.width / 2 + (self.width + 20)
+        center_y: self.parent.height / 2
+        background_color: .46, .29, .92, 1
+        size: 175, 175
+        background_normal: ''
+        on_press: root.manager.current = 'usbguide'
+
+        RelativeLayout:
+            pos: self.parent.pos
+            size: self.parent.size
+
+            Image:
+                size_hint: None, None
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                size: 65, 40
+                source: 'assets/usb.png'
+            Label:
+                pos_hint: {'center_x': .5}
+                top: 48
+                text: 'USB'
+                font_size: 18
+
+    Label:
+        size_hint: None, None
+        size: 300, 20
+        pos: 550, 20
+        color: .21, .21, .25, 1
+        font_size: 18
+        text: app.mac_address

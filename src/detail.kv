@@ -1,0 +1,173 @@
+#:kivy 1.10.1
+
+<PreviewImage>:
+    size_hint: None, None
+    size: 448, 248
+
+<Counter>:
+    size_hint: None, None
+    size: 163, 40
+
+    RelativeLayout:
+        size_hint: None, None
+        size: 40, 40
+        center_y: self.parent.height
+        pos: 0, 0
+        canvas:
+            Color:
+                rgba: .9, .9, .9, 1
+            Line:
+                rectangle: 0, 0, 40, 40
+
+        Button:
+            background_color: 1, 1, 1, 1
+            background_normal: ''
+            background_down: ''
+            on_press: self.parent.parent.reduce()
+        Label:
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            size_hint: None, None
+            size: self.texture_size
+            text: '-'
+            color: .2, .39, .82, 1
+            font_size: 12
+
+    RelativeLayout:
+        size_hint: None, None
+        size: 75, 40
+        center_y: self.parent.height
+        pos: 44, 0
+        canvas:
+            Color:
+                rgba: .9, .9, .9, 1
+            Line:
+                rectangle: 0, 0, 75, 40
+        Label:
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            size_hint: None, None
+            size: self.texture_size
+            text: str(self.parent.parent.num)
+            font_size: 15
+            color: .21, .21, .25, 1
+
+    RelativeLayout:
+        size_hint: None, None
+        size: 40, 40
+        center_y: self.parent.height
+        right: 123
+        pos: 123, 0
+
+        canvas:
+            Color:
+                rgba: .9, .9, .9, 1
+            Line:
+                rectangle: 0, 0, 40, 40
+        Button:
+            background_color: 1, 1, 1, 1
+            background_normal: ''
+            background_down: ''
+            on_press: self.parent.parent.add()
+        Label:
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            size_hint: None, None
+            size: self.texture_size
+            text: '+'
+            font_size: 12
+            color: .2, .39, .82, 1
+
+
+<Detail>:
+    id: screen
+    preview_area: preview_area
+    counter: counter
+
+    BackArrow:
+        on_press: root.manager.current = self.parent.detail_back_screen
+
+    Label:
+        size_hint: None, None
+        size: 400, 25
+        text: self.parent.email
+        color: .14, .15, .37, 1
+        font_size: 16
+        line_height: 1.63
+        center_x: self.parent.width / 2
+        top: self.parent.height - 26
+
+    Label:
+        size_hint: None, None
+        size: 400, 25
+        text: self.parent.file_name
+        color: .21, .21, .25, 1
+        font_size: 18
+        center_x: self.parent.width / 2
+        top: self.parent.height - 63
+
+    ConfirmBtn:
+        text: 'Preview'
+        center_x: self.parent.width / 2
+        top: self.parent.height - 100
+        on_press: self.parent.preview()
+
+    RelativeLayout:
+        size_hint: None, None
+        size: 450, 250
+        center_x: self.parent.width / 2
+        top: self.parent.height - 158
+
+        Widget:
+            canvas.before:
+                Color:
+                    rgba: .9, .9, .9, 1
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+
+            canvas:
+                Color:
+                    rgba: 1, 1, 1, 1
+                Rectangle:
+                    size: 448, 248
+                    pos: 1, 1
+
+        RelativeLayout:
+            id: preview_area
+            size_hint: None, None
+            size: 448, 248
+            pos: 1, 1
+
+    RelativeLayout:
+        size_hint: None, None
+        size: 450, 40
+        center_x: self.parent.width / 2
+        top: self.parent.height - 428
+
+        Label:
+            size_hint: None, None
+            size: self.texture_size
+            text: 'Number of copies'
+            color: .21, .21, .25, 1
+            font_size: 12
+            right: 0
+            text_size: None, 40
+            valign: 'middle'
+
+        Counter:
+            id: counter
+            pos_hint: {'center_x': .5, 'center_y': .5}
+
+        Label:
+            size_hint: None, None
+            size: self.texture_size
+            text: 'Price: $ ' + str(screen.unit_price * screen.page_count * counter.num)
+            color: .21, .21, .25, 1
+            font_size: 12
+            right: 380
+            text_size: None, 40
+            valign: 'middle'
+
+        ConfirmBtnS:
+            right: self.parent.width + 36 + self.width
+            text: 'Next'
+            on_press: screen.confirm()
+

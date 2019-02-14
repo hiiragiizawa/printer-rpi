@@ -1,0 +1,14 @@
+#:kivy 1.10.1
+
+<BackArrow>:
+    size_hint: None, None
+    size: 40, 20
+    pos: 30, self.parent.height - 33
+    background_normal: ''
+    background_down: ''
+
+    Image:
+        pos: self.parent.pos
+        size_hint: None, None
+        size: self.parent.size
+        source: self.parent.image_source

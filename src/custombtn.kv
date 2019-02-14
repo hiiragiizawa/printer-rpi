@@ -1,0 +1,77 @@
+#:kivy 1.10.1
+
+<ConfirmBtn>:
+    size_hint: None, None
+    size: 210, 43
+    Widget:
+        size_hint: None, None
+        size: 210, 43
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        canvas:
+            Color:
+                rgba: self.parent.background_color
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: 21, 21, 21, 21
+
+    Label:
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        size_hint: None, None
+        size: self.texture_size
+        text: self.parent.text
+        color: self.parent.text_color
+        font_size: 12
+
+<CancelBtn>:
+    size_hint: None, None
+    size: 210, 43
+    Widget:
+        size_hint: None, None
+        size: 210, 43
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        canvas.before:
+            Color:
+                rgba: .9, .9, .9, 1
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: 21, 21, 21, 21
+        canvas:
+            Color:
+                rgba: self.parent.background_color
+            RoundedRectangle:
+                pos: 1, 1
+                size: 208, 41
+                radius: 21, 21, 21, 21
+
+    Label:
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        size_hint: None, None
+        size: self.texture_size
+        text: self.parent.text
+        color: .26, .26, .3, 1
+        font_size: 12
+
+<ConfirmBtnS>:
+    size_hint: None, None
+    size: 109, 43
+    Widget:
+        size_hint: None, None
+        size: 109, 43
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        canvas:
+            Color:
+                rgba: self.parent.background_color
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: 21, 21, 21, 21
+
+    Label:
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        size_hint: None, None
+        size: self.texture_size
+        text: self.parent.text
+        color: .18, .38, .84, 1
+        font_size: 12

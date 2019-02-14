@@ -1,0 +1,19 @@
+#:kivy 1.10.1
+
+<Error>:
+    BackArrow:
+        on_press: root.manager.current = 'home'
+
+    Label:
+        size_hint: None, None
+        size: 442, 111
+        center_x: self.parent.width / 2
+        top: self.parent.height - 115
+        text: 'This printer runs out of inks or papers, your \n order cannot be completed. Please change \n another Printer.'
+        font_size: 18
+        canvas.before:
+            Color:
+                rgba: .99, .44, .35, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size

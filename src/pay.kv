@@ -1,0 +1,74 @@
+#:kivy 1.10.1
+
+<Pay>:
+    id: screen
+    qrnode: qrnode
+
+    BackArrow:
+        on_press: root.manager.current = 'home'
+
+    RelativeLayout:
+        size_hint: None, None
+        size: 450, 93
+        center_x: self.parent.width / 2
+        top: self.parent.height - 33
+
+        # Button:
+        #     size_hint: None, None
+        #     size: 219, 93
+        #     background_normal: ''
+        #     # background_down: ''
+        #     on_press: root.manager.current = 'complete'
+        #     canvas:
+        #         Color:
+        #             rgba: .9, .9, .9, 1
+        #         Line:
+        #             rectangle: (0, 0, 219, 93)
+
+        #     Image:
+        #         size_hint: None, None
+        #         size: 110, 27
+        #         source: 'assets/paypal.png'
+        #         center: self.parent.center
+
+
+        Button:
+            size_hint: None, None
+            size: 219, 93
+            # pos: 231, 0
+            pos: 116, 0
+            background_normal: ''
+            # background_down: ''
+            text: 'Sarawak Pay'
+            color: .47, .48, .57, 1
+            font_size: 20
+            # on_press: root.manager.current = 'complete'
+            canvas:
+                Color:
+                    rgba: .9, .9, .9, 1
+                Line:
+                    rectangle: (116, 0, 219, 93)
+
+    AsyncImage:
+        id: qrnode
+        source: screen.qrcode_url
+        size_hint: None, None,
+        size: 176, 176
+        center_x: self.parent.width / 2
+        top: self.parent.height - 169
+        allow_stretch: True
+        canvas.before:
+            Color:
+                rgba: .9, .9, .9, 1
+            Line:
+                rectangle: self.x - 5, self.y - 5, 186, 186
+
+    Label:
+        markup: True
+        size_hint: None, None
+        size: self.texture_size
+        text: "The QR Code will refresh in [color=ff7052]" + str(screen.count_down_num) + "s[/color]"
+        font_size: 15
+        color: .47, .48, .57, 1
+        center_x: self.parent.width / 2
+        top: self.parent.height - 389

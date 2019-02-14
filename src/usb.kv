@@ -1,0 +1,42 @@
+#:kivy 1.10.1
+
+<Usb>:
+    confirmBtn: confirmBtn
+    canvas:
+        Color:
+            rgba: .2, .2, .2, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    BackArrow:
+        image_source: 'assets/backArrowWhite.png'
+        background_color: .2, .2, .2, 1
+        on_press: root.manager.current = 'home'
+
+    Widget:
+        size_hint: None, None
+        size: self.parent.width, 66
+        pos: 0, 0
+        canvas:
+            Color:
+                rgba: .95, .96, .99, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+    ConfirmBtn:
+        id: confirmBtn
+        text: 'OK'
+        pos: (self.parent.width - 210) / 2, 11
+        on_press: self.parent.on_confirm_select()
+
+<UDiskChooser>:
+    size_hint: None, None
+    pos: 50, 100
+    canvas:
+        Color:
+            rgba: .2, .2, .2, 1
+        Rectangle:
+            size: self.size
+            pos: 0, 0

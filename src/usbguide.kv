@@ -1,0 +1,11 @@
+#:kivy 1.10.1
+
+<UsbGuide>:
+    Image:
+        size_hint: 1, 1
+        source: 'assets/usbguide.png'
+        background_color: 0, 0, 0, 1
+        allow_stretch: True
+
+    BackArrow:
+        on_press: root.manager.current = 'home'

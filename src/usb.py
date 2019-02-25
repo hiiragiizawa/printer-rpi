@@ -5,6 +5,7 @@ from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.filechooser import FileChooser
 from kivy.uix.filechooser import FileChooser, FileChooserIconLayout
 from kivy.clock import Clock
+from kivy.logger import Logger
 
 import os
 from pathlib import Path
@@ -49,7 +50,7 @@ class Usb(Screen):
     def _scan_udisk(self, *args, **kwargs):
         udisk_path = App.get_running_app().udisk_path
         if not Path(udisk_path).exists():
-            print('udisk umounted')
+            Logger.info('udisk umounted')
             self.manager.current = 'usbguide'
             return
         self.schedule = Clock.schedule_once(self._scan_udisk, 1)

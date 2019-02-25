@@ -5,6 +5,7 @@ from kivy.uix.label import Label
 from kivy.properties import StringProperty, ObjectProperty, NumericProperty
 from kivy.core.window import Window
 from kivy.clock import Clock
+from kivy.logger import Logger
 
 import subprocess
 import requests
@@ -16,12 +17,17 @@ from src.backarrow import BackArrow
 from src.loading import Loading
 from src.homemodal import HomeModal
 
+PAY_CHANNEL_NAMES = ['Sarawak Pay', 'Boost', 'Online Payment']
+PAY_CHANNEL_LOGOS = ['assets/sarawak-pay-logo.png', 'assets/boost-logo.png', 'assets/online-banking-logo.png']
+
 class Pay(Screen):
     qrcode_url = StringProperty('')
     count_down_num = NumericProperty(60)
     go_home_schedule = ObjectProperty()
     count_down_schedule = ObjectProperty()
     order_state_schedule = ObjectProperty()
+    pay_channel_name = ''
+    pay_channel_logo = ''
 
     def __init__(self, **kwargs):
         super(Pay, self).__init__(**kwargs)
@@ -35,7 +41,15 @@ class Pay(Screen):
         self.count_down_num = 60
         self.go_home_schedule = Clock.schedule_once(self._show_gohome_modal, 180)
         Window.bind(on_touch_down=self._listen_screen_touch)
+        pay_channel = App.get_running_app().pay_channel
+        self.pay_channel_name = PAY_CHANNEL_NAMES[pay_channel]
+        self.pay_channel_logo = PAY_CHANNEL_LOGOS[pay_channel]
+        self.pay_channel_label.text = PAY_CHANNEL_NAMES[pay_channel]
+        self.pay_channel_image.source = PAY_CHANNEL_LOGOS[pay_channel]
 
+        Clock.schedule_once(self._delay_init, .5)
+
+    def _delay_init(self, time):
         if self._init_qrcode():
             self.count_down_schedule = Clock.schedule_once(self._count_down, 1)
             self.order_state_schedule = Clock.schedule_interval(self._listen_order_state, 5)
@@ -61,11 +75,11 @@ class Pay(Screen):
         out, err = process.communicate()
 
         if err:
-            print('print error, ' + str(err))
+            Logger.info('print error, ' + str(err))
             self._show_warning('Printing Error Occurred，Please Contact Service Center')
         else:
             job_id = self._get_job_id(out)
-            print('job id is ' + job_id)
+            Logger.info('job id is ' + job_id)
             Clock.schedule_once(partial(self._listen_printer_job, job_id))
 
     def _listen_printer_job(self, time, job_id):
@@ -83,20 +97,20 @@ class Pay(Screen):
             job_id = reg.match(str(out)).group(1)
             return job_id
         except Exception as e:
-            print('get print job id failed, ' + str(e))
+            Logger.exception('get print job id failed, ' + str(e))
             return None
 
     def _listen_order_state(self, time):
         app = App.get_running_app()
         try:
-            print('get order state---->')
-            url = 'https://printer-test-api.iremi.com/order/pay/status?id=' + app.order_id
+            Logger.info('get order state---->')
+            url = App.get_running_app().api_host + '/order/pay/status?id=' + app.order_id
             if 'userId' in app.file_info:
                 url += ('&userId=' + app.file_info['userId'])
             req = requests.get(url)
             res = req.json()
-            print('order state response----->')
-            print(res)
+            Logger.info('order state response----->')
+            Logger.info(res)
             errcode = res['errcode']
             if res['errcode'] != 0:
                 self._show_warning(str(errcode))
@@ -107,7 +121,7 @@ class Pay(Screen):
             elif status == 2:
                 self._pay_error()
         except Exception as e:
-            print(e)
+            Logger.exception(e)
             self._show_warning('Get Order Status Error')
             return False
 
@@ -148,25 +162,25 @@ class Pay(Screen):
 
     def _get_qrcode(self):
         app = App.get_running_app()
-        data = {"id": app.order_id, "type": 0}
+        data = {"id": app.order_id, "type": app.pay_channel}
         if 'userId' in app.file_info:
             data['userId'] = app.file_info['userId']
 
         try:
-            print('get qrcode---->')
-            print(data)
+            Logger.info('get qrcode---->')
+            Logger.info(data)
             headers = {'content-type':'application/json'}
-            req = requests.post('https://printer-test-api.iremi.com/order/pay/qrcode', data=json.dumps(data), headers=headers)
+            req = requests.post(App.get_running_app().api_host + '/order/pay/qrcode', data=json.dumps(data), headers=headers)
             res = req.json()
-            print('qrcode response----->')
-            print(res)
+            Logger.info('qrcode response----->')
+            Logger.info(res)
             errcode = res['errcode']
             if res['errcode'] != 0:
                 self._show_warning(str(errcode))
                 return False
             return res['data']['url']
         except Exception as e:
-            print(e)
+            Logger.exception(e)
             self._show_warning('Get Qrcode Error')
             return False
 
@@ -179,7 +193,7 @@ class Pay(Screen):
         self.homemodal.open()
 
     def _show_warning(self, msg):
-        print(msg)
+        Logger.info(msg)
         self.loading.dismiss()
         self.popup.auto_dismiss = True
         self.popup.title = 'Warning'
@@ -187,7 +201,7 @@ class Pay(Screen):
         self.popup.open()
 
     def _show_success(self, msg):
-        print(msg)
+        Logger.info(msg)
         self.loading.dismiss()
         self.popup.auto_dismiss = False
         self.popup.title = 'Success'

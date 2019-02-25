@@ -8,6 +8,7 @@ from kivy.clock import Clock
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.button import Button
 from kivy.uix.image import Image
+from kivy.logger import Logger
 
 import requests
 import sys
@@ -62,7 +63,7 @@ class BookingCode(Screen):
         if not file_info:
             return
 
-        print(file_info)
+        Logger.info(file_info)
 
         App.get_running_app().file_info = file_info
         file_url = file_info['fileUrl']
@@ -72,17 +73,17 @@ class BookingCode(Screen):
 
     def _get_file_info(self):
         try:
-            print('get file info, code is ' + str(self.code))
-            req = requests.get('https://printer-test-api.iremi.com/file/booknumber?bookNumber=' + self.code)
+            Logger.info('get file info, code is ' + str(self.code))
+            req = requests.get(App.get_running_app().api_host + '/file/booknumber?bookNumber=' + self.code)
             res = req.json()
-            print(res)
+            Logger.info(res)
 
             if res['errcode'] != 0:
                 self._show_error(str(res['errcode']))
             else:
                 return res['data']
         except Exception as e:
-            print(e)
+            Logger.exception(e)
             self._show_error('Connected Failed')
 
     def _download_file(self, file_url):
@@ -110,11 +111,11 @@ class BookingCode(Screen):
             self.loading.dismiss()
             return True
         except Exception as e:
-            print(e)
+            Logger.exception(e)
             self._show_error('Download Error')
 
     def _show_error(self, msg):
-        print(msg)
+        Logger.info(msg)
         self.loading.dismiss()
         self.popup.content.text = msg
         self.popup.open()

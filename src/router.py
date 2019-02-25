@@ -5,12 +5,14 @@ from kivy.core.window import Window
 from kivy.clock import Clock
 
 from pathlib import Path
+import configparser
 
 from src.home import Home
 from src.bookingcode import BookingCode
 from src.complete import Complete
 from src.detail import Detail
 from src.pay import Pay
+from src.payselector import PaySelector
 from src.error import Error
 from src.usb import Usb
 from src.usbguide import UsbGuide
@@ -49,6 +51,8 @@ class Router(ScreenManager):
         Builder.load_file('src/qrguide.kv')
         self.add_widget(QrGuide(name='qrguide'))
 
+        Builder.load_file('src/payselector.kv')
+        self.add_widget(PaySelector(name='payselector'))
 
 class PrinterApp(App):
 
@@ -58,6 +62,12 @@ class PrinterApp(App):
         self.detail_back_screen = ''
         self.udisk_path = ''
         self.mac_address = self._get_mac_address()
+        config = configparser.ConfigParser()
+        try:
+            config.read('config.ini')
+            self.api_host = config['API']['HOST']
+        except Exception:
+            self.api_host = 'https://printer-test-api.iremi.com'
 
     def build(self):
         return Router(transition=NoTransition())

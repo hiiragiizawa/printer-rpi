@@ -76,3 +76,9 @@
     cd app_path
     python3.7 main.py
 ```
+
+
+Deploy
+
+
+scp -r * pi@192.168.1.8:/home/pi/printer-rpi-RPi

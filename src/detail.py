@@ -6,6 +6,7 @@ from kivy.uix.image import Image
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.clock import Clock
+from kivy.logger import Logger
 
 import os
 from pdf2image import convert_from_path
@@ -62,9 +63,9 @@ class Detail(Screen):
     def _get_printer_state(self):
         mac_address = App.get_running_app().mac_address
         try:
-            req = requests.get('https://printer-test-api.iremi.com/cms/printer/getbymac?address=' + mac_address)
+            req = requests.get(App.get_running_app().api_host + '/cms/printer/getbymac?address=' + mac_address)
             res = req.json()
-            print(res)
+            Logger.info(res)
             if res['errcode'] != 0:
                 self._show_warning('Printer disconnected')
                 Clock.schedule_once(self._go_home, 3)
@@ -74,7 +75,7 @@ class Detail(Screen):
             self.paper_max = min(data['paperSurplus'], data['inkSurplus'])
             self.unit_price = data['unitPrice']
         except Exception as e:
-            print(e)
+            Logger.exception(e)
             self._go_home()
 
     def _go_home(self, *args, **kwargs):
@@ -118,7 +119,7 @@ class Detail(Screen):
         self.preview_area.clear_widgets()
 
     def _show_warning(self, msg):
-        print(msg)
+        Logger.info(msg)
         self.loading.dismiss()
         self.popup.content.text = msg
         self.popup.open()
@@ -153,7 +154,7 @@ class Detail(Screen):
 
         if file_type in ['jpg', 'png', 'jpeg']:
             self.page_count = 1
-            print('image file page count:' + str(self.page_count))
+            Logger.info('image file page count:' + str(self.page_count))
         else:
             self._set_pdf_page_count(file_path)
 
@@ -161,7 +162,7 @@ class Detail(Screen):
         pdfFileObj = open(path, 'rb')
         pdfReader = PyPDF3.PdfFileReader(pdfFileObj)
         self.page_count = pdfReader.numPages
-        print('pdf file page count:' + str(self.page_count))
+        Logger.info('pdf file page count:' + str(self.page_count))
 
     def confirm(self):
         total_page_count = self.page_count * self.counter.num
@@ -175,15 +176,15 @@ class Detail(Screen):
         total_page_count = self.page_count * self.counter.num
         total_price = self.unit_price * total_page_count
         order_id = self._create_order(total_page_count, total_price)
-        print('order_id: ' + str(order_id))
+        Logger.info('order_id: ' + str(order_id))
         app = App.get_running_app()
         app.total_price = total_price
-        print('total price is ' + str(total_price))
+        Logger.info('total price is ' + str(total_price))
         if order_id:
             app.order_id = order_id
             app.num_copies = self.counter.num
             self.loading.dismiss()
-            self.manager.current = 'pay'
+            self.manager.current = 'payselector'
 
     def _create_order(self, total_page_count, total_price):
         data = {"id": self.printer_id, "paper": total_page_count, "money": total_price}
@@ -194,10 +195,10 @@ class Detail(Screen):
                 data[key] = file_info[key]
 
         try:
-            print('order data---->')
-            print(data)
+            Logger.info('order data---->')
+            Logger.info(data)
             headers = {'content-type':'application/json'}
-            req = requests.post('https://printer-test-api.iremi.com/order/submit', data=json.dumps(data), headers=headers)
+            req = requests.post(App.get_running_app().api_host + '/order/submit', data=json.dumps(data), headers=headers)
             res = req.json()
             errcode = res['errcode']
             if res['errcode'] == 31010:
@@ -208,7 +209,7 @@ class Detail(Screen):
                 return False
             return res['data']['orderId']
         except Exception as e:
-            print(e)
+            Logger.exception(e)
             self._show_warning('Submit Error')
             return False
 

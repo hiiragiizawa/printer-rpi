@@ -1,7 +1,5 @@
 import os
 os.environ['KIVY_GL_BACKEND'] = 'gl'
-os.environ['KIVY_DPI'] = '300'
-os.environ['KIVY_METRICS_DENSITY'] = '4'
 
 # use local config
 from kivy.config import Config

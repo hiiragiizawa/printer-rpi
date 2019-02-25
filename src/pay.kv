@@ -3,65 +3,58 @@
 <Pay>:
     id: screen
     qrnode: qrnode
+    pay_channel_label: pay_channel_label
+    pay_channel_image: pay_channel_image
 
     BackArrow:
-        on_press: root.manager.current = 'home'
+        on_press: root.manager.current = 'payselector'
 
-    RelativeLayout:
+    Label:
         size_hint: None, None
-        size: 450, 93
+        text: 'Scan & Pay'
+        color: .4, .4, .4, 1
+        font_size: 24
         center_x: self.parent.width / 2
-        top: self.parent.height - 33
+        top: self.parent.height - 26
 
-        # Button:
-        #     size_hint: None, None
-        #     size: 219, 93
-        #     background_normal: ''
-        #     # background_down: ''
-        #     on_press: root.manager.current = 'complete'
-        #     canvas:
-        #         Color:
-        #             rgba: .9, .9, .9, 1
-        #         Line:
-        #             rectangle: (0, 0, 219, 93)
-
-        #     Image:
-        #         size_hint: None, None
-        #         size: 110, 27
-        #         source: 'assets/paypal.png'
-        #         center: self.parent.center
-
-
-        Button:
+    Widget:
+        size_hint: None, None
+        size: 200, 200
+        pos: 140, 140
+        canvas:
+            Color:
+                rgba: .9, .9, .9, 1
+            Line:
+                rectangle: (140, 140, 200, 200)
+        Image:
+            id: pay_channel_image
             size_hint: None, None
-            size: 219, 93
-            # pos: 231, 0
-            pos: 116, 0
-            background_normal: ''
-            # background_down: ''
-            text: 'Sarawak Pay'
-            color: .47, .48, .57, 1
-            font_size: 20
-            # on_press: root.manager.current = 'complete'
-            canvas:
-                Color:
-                    rgba: .9, .9, .9, 1
-                Line:
-                    rectangle: (116, 0, 219, 93)
+            size: 180, 180
+            # source: screen.pay_channel_logo
+            center: self.parent.center
+    Label:
+        id: pay_channel_label
+        size_hint: None, None
+        size: 200, 20
+        # text: screen.pay_channel_name
+        color: .42, .42, .42, 1
+        font_size: 18
+        line_height: 1
+        top: 130
+        center_x: 240
 
     AsyncImage:
         id: qrnode
         source: screen.qrcode_url
         size_hint: None, None,
-        size: 176, 176
-        center_x: self.parent.width / 2
-        top: self.parent.height - 169
+        size: 240, 240
+        pos: 410, 115
         allow_stretch: True
         canvas.before:
             Color:
                 rgba: .9, .9, .9, 1
             Line:
-                rectangle: self.x - 5, self.y - 5, 186, 186
+                rectangle: self.x - 5, self.y - 5, 250, 250
 
     Label:
         markup: True
@@ -71,4 +64,4 @@
         font_size: 15
         color: .47, .48, .57, 1
         center_x: self.parent.width / 2
-        top: self.parent.height - 389
+        top: 50

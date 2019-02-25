@@ -1,0 +1,92 @@
+#:kivy 1.10.1
+
+<PaySelector>:
+    BackArrow:
+        on_press: root.manager.current = 'home'
+
+    Label:
+        size_hint: None, None
+        text: 'Select Payment Method'
+        color: .4, .4, .4, 1
+        font_size: 24
+        center_x: self.parent.width / 2
+        top: self.parent.height - 26
+
+    Button:
+        size_hint: None, None
+        size: 200, 200
+        pos: 70, 130
+        background_normal: ''
+        on_press: self.parent.on_select(0)
+        canvas:
+            Color:
+                rgba: .9, .9, .9, 1
+            Line:
+                rectangle: (70, 130, 200, 200)
+        Image:
+            size_hint: None, None
+            size: 180, 180
+            source: 'assets/sarawak-pay-logo.png'
+            center: self.parent.center
+    Label:
+        size_hint: None, None
+        size: 200, 20
+        text: 'Sarawak Pay'
+        color: .42, .42, .42, 1
+        font_size: 18
+        line_height: 1
+        top: 120
+        center_x: 170
+
+    Button:
+        size_hint: None, None
+        size: 200, 200
+        pos: 300, 130
+        background_normal: ''
+        on_press: self.parent.on_select(1)
+        canvas:
+            Color:
+                rgba: .9, .9, .9, 1
+            Line:
+                rectangle: (300, 130, 200, 200)
+        Image:
+            size_hint: None, None
+            size: 180, 180
+            source: 'assets/boost-logo.png'
+            center: self.parent.center
+    Label:
+        size_hint: None, None
+        size: 200, 20
+        text: 'Boost'
+        color: .42, .42, .42, 1
+        font_size: 18
+        line_height: 1
+        top: 120
+        center_x: 400
+
+    Button:
+        size_hint: None, None
+        size: 200, 200
+        pos: 530, 130
+        background_normal: ''
+        on_press: self.parent.on_select(2)
+        canvas:
+            Color:
+                rgba: .9, .9, .9, 1
+            Line:
+                rectangle: (530, 130, 200, 200)
+        Image:
+            size_hint: None, None
+            size: 180, 180
+            size_hint: 1, 1
+            source: 'assets/online-banking-logo.png'
+            center: self.parent.center
+    Label:
+        size_hint: None, None
+        size: 200, 20
+        text: 'Online Payment'
+        color: .42, .42, .42, 1
+        font_size: 18
+        line_height: 1
+        top: 120
+        center_x: 630

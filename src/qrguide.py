@@ -5,6 +5,7 @@ from kivy.properties import StringProperty, BooleanProperty
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.clock import Clock
+from kivy.logger import Logger
 
 import requests
 import sys
@@ -38,22 +39,22 @@ class QrGuide(Screen):
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
 
     def _callback(self):
-        print('keyboard want to close')
+        Logger.info('keyboard want to close')
 
     def _keyboard_closed(self):
-        print('My keyboard have been closed!')
+        Logger.info('My keyboard have been closed!')
         self._keyboard.unbind(on_key_down=self._on_keyboard_down)
         self._keyboard = None
 
     def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
         if self.isRequesting:
-            print('requesting, please wait')
+            Logger.info('requesting, please wait')
             return False
-        print('The key', keycode, 'have been pressed')
-        print(' - text is %r' % text)
-        print(' - modifiers are %r' % modifiers)
+        Logger.info('The key', keycode, 'have been pressed')
+        Logger.info(' - text is %r' % text)
+        Logger.info(' - modifiers are %r' % modifiers)
 
-        print(keycode)
+        Logger.info(keycode)
         if keycode[0] >= 48 and keycode[0] <= 57:
             self.code += text
 
@@ -80,7 +81,7 @@ class QrGuide(Screen):
         if not file_info:
             return
 
-        print(file_info)
+        Logger.info(file_info)
 
         App.get_running_app().file_info = file_info
         file_url = file_info['fileUrl']
@@ -90,17 +91,17 @@ class QrGuide(Screen):
 
     def _get_file_info(self):
         try:
-            print('get file info, code: ' + str(self.code))
-            req = requests.get('https://printer-test-api.iremi.com/file/booknumber?bookNumber=' + self.code)
+            Logger.info('get file info, code: ' + str(self.code))
+            req = requests.get(App.get_running_app().api_host + '/file/booknumber?bookNumber=' + self.code)
             res = req.json()
-            print(res)
+            Logger.info(res)
 
             if res['errcode'] != 0:
                 self._show_error(str(res['errcode']))
             else:
                 return res['data']
         except Exception as e:
-            print(e)
+            Logger.exception(e)
             self._show_error('Connected Failed')
 
     def _download_file(self, file_url):
@@ -127,11 +128,11 @@ class QrGuide(Screen):
             self.loading.dismiss()
             return True
         except Exception as e:
-            print(e)
+            Logger.exception(e)
             self._show_error('Download Error')
 
     def _show_error(self, msg):
-        print(msg)
+        Logger.info(msg)
         self.loading.dismiss()
         self.popup.content.text = msg
         self.popup.open()

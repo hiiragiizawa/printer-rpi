@@ -79,4 +79,12 @@
         pos: 550, 20
         color: .21, .21, .25, 1
         font_size: 18
-        text: app.mac_address
+        text: app.mac_address + " " + app.api_version
+
+    Label:
+        size_hint: None, None
+        size: 300, 20
+        pos: 20, 20
+        color: .21, .21, .25, 1
+        font_size: 18
+        text: app.ip_address

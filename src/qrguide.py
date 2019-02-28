@@ -50,14 +50,12 @@ class QrGuide(Screen):
         if self.isRequesting:
             Logger.info('requesting, please wait')
             return False
-        Logger.info('The key', keycode, 'have been pressed')
-        Logger.info(' - text is %r' % text)
-        Logger.info(' - modifiers are %r' % modifiers)
 
-        Logger.info(keycode)
+        print(keycode, text, modifiers)
+
         if keycode[0] >= 48 and keycode[0] <= 57:
             self.code += text
-
+        #
         if keycode[0] == 13:
             self.submit()
 

@@ -6,6 +6,7 @@ from kivy.clock import Clock
 
 from pathlib import Path
 import configparser
+import subprocess
 
 from src.home import Home
 from src.bookingcode import BookingCode
@@ -62,10 +63,12 @@ class PrinterApp(App):
         self.detail_back_screen = ''
         self.udisk_path = ''
         self.mac_address = self._get_mac_address()
+        self.ip_address = self._get_ip()
         config = configparser.ConfigParser()
         try:
             config.read('config.ini')
             self.api_host = config['API']['HOST']
+            self.api_version = config['API']['VERSION']
         except Exception:
             self.api_host = 'https://printer-test-api.iremi.com'
 
@@ -89,6 +92,13 @@ class PrinterApp(App):
         else:
             mac_address = 'read mac error'
         return mac_address
+
+    def _get_ip(self):
+        ip_address = ''
+        ip_address = subprocess.getoutput("hostname -I");
+
+        return ip_address
+        # queue = subprocess.Popen('hostname -I', shell=True, stdout=subprocess.PIPE).communicate()[0]
 
     def _show_gohome_modal(self, *args, **kwargs):
         if self.root.current in ['home', 'pay']:

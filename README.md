@@ -81,4 +81,8 @@
 Deploy
 
 
-scp -r * pi@192.168.1.8:/home/pi/printer-rpi-RPi
+scp -r * pi@192.168.1.8:/home/pi/printer-rpi
+
+```
+git pull https://github.com/hiiragiizawa/printer-rpi.git
+```

@@ -37,7 +37,8 @@ class Pay(Screen):
         self.homemodal = HomeModal()
 
     def on_enter(self):
-        self.qrcode_url = ''
+        # self.qrcode_url = ''
+        self.qrcode_url = 'assets/loading.gif'
         self.count_down_num = 60
         self.go_home_schedule = Clock.schedule_once(self._show_gohome_modal, 180)
         Window.bind(on_touch_down=self._listen_screen_touch)
@@ -148,7 +149,6 @@ class Pay(Screen):
         if not qrcode_url:
             self._show_warning('Something error')
             return False
-        # self.qrcode_url = 'http://store-images.s-microsoft.com/image/apps.33967.13510798887182917.246b0a3d-c3cc-46fc-9cea-021069d15c09.392bf5f5-ade4-4b36-aa63-bb15d5c3817a?mode=scale&q=90&h=270&w=270&background=%230078D7'
         self.qrcode_url = qrcode_url.replace('https', 'http', 1)
         return True
 

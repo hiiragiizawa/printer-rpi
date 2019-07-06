@@ -160,9 +160,11 @@ class Detail(Screen):
 
     def _set_pdf_page_count(self, path):
         pdfFileObj = open(path, 'rb')
-        pdfReader = PyPDF3.PdfFileReader(pdfFileObj)
-        self.page_count = pdfReader.numPages
-        Logger.info('pdf file page count:' + str(self.page_count))
+        try:
+            pdfReader = PyPDF3.PdfFileReader(pdfFileObj, strict=False)
+            self.page_count = pdfReader.numPages
+        except Exception as e:
+            Logger.info('pdf file page count:' + str(self.page_count))
 
     def confirm(self):
         total_page_count = self.page_count * self.counter.num

@@ -16,7 +16,6 @@ from src.custombtn import ConfirmBtn
 
 file_filters = ['*.png', '*.jpg', '*.jpeg', '*.pdf', '*.doc', '*.docx', '*.xls', '*.xlsx', '*.ppt', '*.pptx']
 
-# print(11111, os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)))
 class Usb(Screen):
     schedule = ObjectProperty()
 
@@ -49,6 +48,7 @@ class Usb(Screen):
 
     def _scan_udisk(self, *args, **kwargs):
         udisk_path = App.get_running_app().udisk_path
+
         if not Path(udisk_path).exists():
             Logger.info('udisk umounted')
             self.manager.current = 'usbguide'
@@ -68,7 +68,7 @@ class UDiskChooser(RelativeLayout):
         super(UDiskChooser, self).__init__(**kwargs)
 
         file_chooser = FileChooser(
-            rootpath=self.usb_path,
+            rootpath = self.usb_path,
             filters=file_filters,
             on_submit=self.choose_file,
             on_touch_up=self._on_touch_down)

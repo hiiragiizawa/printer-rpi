@@ -28,6 +28,7 @@ class Pay(Screen):
     order_state_schedule = ObjectProperty()
     pay_channel_name = ''
     pay_channel_logo = ''
+    qrcode = False
 
     def __init__(self, **kwargs):
         super(Pay, self).__init__(**kwargs)
@@ -123,8 +124,6 @@ class Pay(Screen):
                 self._pay_error()
         except Exception as e:
             Logger.exception(e)
-            self._show_warning('Get Order Status Error')
-            return False
 
     def _pay_success(self):
         self.count_down_schedule.cancel()
@@ -145,12 +144,7 @@ class Pay(Screen):
         self.manager.current = 'home'
 
     def _init_qrcode(self):
-        qrcode_url = self._get_qrcode()
-        if not qrcode_url:
-            self._show_warning('Something error')
-            return False
-        self.qrcode_url = qrcode_url.replace('https', 'http', 1)
-        return True
+        Clock.schedule_once(self._get_qrcode, 1)
 
     def _count_down(self, time):
         if self.count_down_num == 0 and self._init_qrcode():
@@ -160,28 +154,28 @@ class Pay(Screen):
         self.count_down_num -= 1
         self.count_down_schedule = Clock.schedule_once(self._count_down, 1)
 
-    def _get_qrcode(self):
+    def _get_qrcode(self, time):
         app = App.get_running_app()
         data = {"id": app.order_id, "type": app.pay_channel}
         if 'userId' in app.file_info:
             data['userId'] = app.file_info['userId']
 
         try:
-            Logger.info('get qrcode---->')
             Logger.info(data)
             headers = {'content-type':'application/json'}
             req = requests.post(App.get_running_app().api_host + '/order/pay/qrcode', data=json.dumps(data), headers=headers)
             res = req.json()
-            Logger.info('qrcode response----->')
             Logger.info(res)
             errcode = res['errcode']
             if res['errcode'] != 0:
                 self._show_warning(str(errcode))
                 return False
-            return res['data']['url']
+            self.qrcode_url = res['data']['url']
+            self.qrcode_url = self.qrcode_url.replace('https', 'http', 1)
+            return True
         except Exception as e:
             Logger.exception(e)
-            self._show_warning('Get Qrcode Error')
+            Clock.schedule_once(self._get_qrcode, 3);
             return False
 
     def _listen_screen_touch(self, instance, event):

@@ -88,7 +88,6 @@ class QrGuide(Screen):
             self.manager.current = 'detail'
 
     def _get_file_info(self):
-
         try:
             Logger.info('get file info, code: ' + str(self.code))
             req = requests.get(App.get_running_app().api_host + '/file/booknumber?bookNumber=' + self.code)
@@ -98,9 +97,10 @@ class QrGuide(Screen):
             if res['errcode'] != 0:
                 self._show_error(str(res['errcode']))
             else:
+
                 return res['data']
         except Exception as e:
-            Logger.exception(e)
+            Logger.info("Network timeout, retry in 3s")
             self._show_error('Connected Failed')
 
     def _download_file(self, file_url):

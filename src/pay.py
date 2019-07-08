@@ -174,7 +174,6 @@ class Pay(Screen):
             self.qrcode_url = self.qrcode_url.replace('https', 'http', 1)
             return True
         except Exception as e:
-            # Logger.exception(e)
             Logger.info('Network timeout, retrying in 3s')
             Clock.schedule_once(self._get_qrcode, 3);
             return False

@@ -23,8 +23,6 @@ from src.backarrow import BackArrow
 from src.custombtn import ConfirmBtn, ConfirmBtnS
 from src.loading import Loading
 
-# default_info = {'id': '287976392019283968', 'userId': '280772321789218816', 'email': '39627596@qq.com', 'name': 'IMG_2313.HEIC', 'size': 1551340.0, 'type': 'image/jpeg', 'fileUrl': 'https://s3.amazonaws.com/printer7212b9b1d7bf4475aef6e7d93e2fd4b4/public/undefined_IMG_2313.HEIC', 'uploadTime': 1542786923000, 'updateTime': 1542786923000, 'status': 0, 'bookNumber': '10000087'}
-
 class PreviewImage(Image):
     source = StringProperty()
 
@@ -63,9 +61,7 @@ class Detail(Screen):
     def _get_printer_state(self):
         mac_address = App.get_running_app().mac_address
         try:
-            req = requests.get(App.get_running_app().api_host + '/cms/printer/getbymac?address=' + mac_address)
-            res = req.json()
-            Logger.info(res)
+            res = App.get_running_app().rest_get('cms/printer/getbymac?address=' + mac_address)
             if res['errcode'] != 0:
                 self._show_warning('Printer disconnected')
                 Clock.schedule_once(self._go_home, 3)
@@ -154,17 +150,15 @@ class Detail(Screen):
 
         if file_type in ['jpg', 'png', 'jpeg']:
             self.page_count = 1
-            Logger.info('image file page count:' + str(self.page_count))
         else:
-            self._set_pdf_page_count(file_path)
+            self.page_count = self.pdf2page_count(file_path)
 
-    def _set_pdf_page_count(self, path):
+        Logger.info('Page: ' + str(self.page_count))
+
+    def pdf2page_count(self, path):
         pdfFileObj = open(path, 'rb')
-        try:
-            pdfReader = PyPDF3.PdfFileReader(pdfFileObj, strict=False)
-            self.page_count = pdfReader.numPages
-        except Exception as e:
-            Logger.info('pdf file page count:' + str(self.page_count))
+        pdfReader = PyPDF3.PdfFileReader(pdfFileObj, strict=False)
+        return pdfReader.numPages
 
     def confirm(self):
         total_page_count = self.page_count * self.counter.num
@@ -197,11 +191,7 @@ class Detail(Screen):
                 data[key] = file_info[key]
 
         try:
-            Logger.info('order data---->')
-            Logger.info(data)
-            headers = {'content-type':'application/json'}
-            req = requests.post(App.get_running_app().api_host + '/order/submit', data=json.dumps(data), headers=headers)
-            res = req.json()
+            res = App.get_running_app().rest_post('order/submit', data)
             errcode = res['errcode']
             if res['errcode'] == 31010:
                 self._out_of_limit()

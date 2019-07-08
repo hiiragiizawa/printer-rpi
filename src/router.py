@@ -3,10 +3,19 @@ from kivy.uix.screenmanager import ScreenManager, Screen, NoTransition
 from kivy.lang import Builder
 from kivy.core.window import Window
 from kivy.clock import Clock
+from kivy.logger import Logger
 
 from pathlib import Path
 import configparser
 import subprocess
+
+import requests
+import sys
+import json
+
+from requests.packages.urllib3.util import Retry
+from requests.adapters import HTTPAdapter
+from requests import Session, exceptions
 
 from src.home import Home
 from src.bookingcode import BookingCode
@@ -70,7 +79,7 @@ class PrinterApp(App):
             self.api_host = config['API']['HOST']
             self.api_version = config['API']['VERSION']
         except Exception:
-            self.api_host = 'https://printer-test-api.iremi.com'
+            self.api_host = 'https://remi.print4u.com.my'
 
     def build(self):
         return Router(transition=NoTransition())
@@ -111,3 +120,22 @@ class PrinterApp(App):
 
     def on_stop(self):
         print('stop')
+
+    def rest_get(self, api):
+        Logger.info('REST GET: ' + self.api_host + '/' + api)
+        ses = Session()
+        retries = Retry(total=6, backoff_factor=1, connect=5, status=3, status_forcelist=[400, 401, 404, 500, 501, 502])
+        ses.mount("https://", HTTPAdapter(max_retries=retries))
+        ses = requests.get(self.api_host + '/' + api)
+        Logger.info('RESPONSE: ' + ses.text);
+        return ses.json();
+
+    def rest_post(self, api, data):
+        Logger.info('REST POST: ' + self.api_host + '/' + api)
+        Logger.info('DATA: ' + str(data))
+        ses = Session()
+        retries = Retry(total=6, backoff_factor=1, connect=5, status=3, status_forcelist=[400, 401, 404, 500, 501, 502])
+        ses.mount("https://", HTTPAdapter(max_retries=retries))
+        ses = requests.post(self.api_host + '/' + api, data=json.dumps(data), headers={'content-type':'application/json'})
+        Logger.info('RESPONSE: ' + ses.text);
+        return ses.json();

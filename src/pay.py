@@ -104,14 +104,11 @@ class Pay(Screen):
     def _listen_order_state(self, time):
         app = App.get_running_app()
         try:
-            Logger.info('get order state---->')
-            url = App.get_running_app().api_host + '/order/pay/status?id=' + app.order_id
+            api = 'order/pay/status?id=' + app.order_id
             if 'userId' in app.file_info:
-                url += ('&userId=' + app.file_info['userId'])
-            req = requests.get(url)
-            res = req.json()
-            Logger.info('order state response----->')
-            Logger.info(res)
+                api += ('&userId=' + app.file_info['userId'])
+            res = App.get_running_app().rest_get(api);
+
             errcode = res['errcode']
             if res['errcode'] != 0:
                 self._show_warning(str(errcode))
@@ -127,16 +124,12 @@ class Pay(Screen):
     def _pay_success(self):
         self.count_down_schedule.cancel()
         self.order_state_schedule.cancel()
-        # self._show_success('Order Success')
-        # Clock.schedule_once(self._print, 3)
         self._print()
 
     def _pay_error(self):
         self.count_down_schedule.cancel()
         self.order_state_schedule.cancel()
-        # self._show_success('Order Success')
-        # Clock.schedule_once(self._print, 3)
-        self._show_warning('Payment Failed')
+        self._show_warning('Payment canceled.')
         Clock.schedule_once(self._go_home, 2)
 
     def _go_home(self, time):
@@ -159,13 +152,8 @@ class Pay(Screen):
         data = {"id": app.order_id, "type": app.pay_channel}
         if 'userId' in app.file_info:
             data['userId'] = app.file_info['userId']
-
         try:
-            Logger.info(data)
-            headers = {'content-type':'application/json'}
-            req = requests.post(App.get_running_app().api_host + '/order/pay/qrcode', data=json.dumps(data), headers=headers)
-            res = req.json()
-            Logger.info(res)
+            res = App.get_running_app().rest_post('order/pay/qrcode', data)
             errcode = res['errcode']
             if res['errcode'] != 0:
                 self._show_warning(str(errcode))
@@ -174,6 +162,7 @@ class Pay(Screen):
             self.qrcode_url = self.qrcode_url.replace('https', 'http', 1)
             return True
         except Exception as e:
+            Logger.exception(e);
             Logger.info('Network timeout, retrying in 3s')
             Clock.schedule_once(self._get_qrcode, 3);
             return False

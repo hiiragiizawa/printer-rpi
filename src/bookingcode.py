@@ -13,6 +13,10 @@ from kivy.logger import Logger
 import requests
 import sys
 
+from requests.packages.urllib3.util import Retry
+from requests.adapters import HTTPAdapter
+from requests import Session, exceptions
+
 from src.custombtn import ConfirmBtn, CancelBtn
 from src.backarrow import BackArrow
 from src.loading import Loading
@@ -63,8 +67,6 @@ class BookingCode(Screen):
         if not file_info:
             return
 
-        Logger.info(file_info)
-
         App.get_running_app().file_info = file_info
         file_url = file_info['fileUrl']
 
@@ -73,41 +75,21 @@ class BookingCode(Screen):
 
     def _get_file_info(self):
         try:
-            Logger.info('get file info, code is ' + str(self.code))
-            req = requests.get(App.get_running_app().api_host + '/file/booknumber?bookNumber=' + self.code)
-            res = req.json()
-            Logger.info(res)
-
+            res = App.get_running_app().rest_get('file/booknumber?bookNumber=' + self.code)
             if res['errcode'] != 0:
-                self._show_error(str(res['errcode']))
+                self._show_error('Invalid booking no.')
             else:
                 return res['data']
         except Exception as e:
             Logger.exception(e)
-            self._show_error('Connected Failed')
+            self._show_error('Network error, please try again later.')
 
     def _download_file(self, file_url):
         try:
             with open('tmp/download.data', 'wb') as f:
-                # 为了测试，把全部下载链接换成了一张阿里云上面的图片
-                # file_url = 'https://remi-images.oss-cn-beijing.aliyuncs.com/cms/10_1476848902861.jpg'
                 response = requests.get(file_url, timeout=15)
                 total_length = response.headers.get('content-length')
-
                 f.write(response.content)
-
-                # if total_length is None:
-                #     f.write(response.content)
-                # else:
-                #     dl = 0
-                #     total_length = int(total_length)
-                #     for data in response.iter_content(chunk_size=4096):
-                #         dl += len(data)
-                #         f.write(data)
-                #         done = int(50 * dl / total_length)
-                #         sys.stdout.write("\r[%s%s]" % ('=' * done, ' ' * (50-done)) )
-                #         sys.stdout.flush()
-
             self.loading.dismiss()
             return True
         except Exception as e:

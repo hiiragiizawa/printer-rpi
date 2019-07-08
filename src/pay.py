@@ -38,7 +38,6 @@ class Pay(Screen):
         self.homemodal = HomeModal()
 
     def on_enter(self):
-        # self.qrcode_url = ''
         self.qrcode_url = 'assets/loading.gif'
         self.count_down_num = 60
         self.go_home_schedule = Clock.schedule_once(self._show_gohome_modal, 180)
@@ -145,6 +144,7 @@ class Pay(Screen):
 
     def _init_qrcode(self):
         Clock.schedule_once(self._get_qrcode, 1)
+        return True;
 
     def _count_down(self, time):
         if self.count_down_num == 0 and self._init_qrcode():

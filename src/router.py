@@ -12,6 +12,8 @@ import subprocess
 import requests
 import sys
 import json
+import socket
+
 
 from requests.packages.urllib3.util import Retry
 from requests.adapters import HTTPAdapter
@@ -103,11 +105,9 @@ class PrinterApp(App):
         return mac_address
 
     def _get_ip(self):
-        ip_address = ''
-        ip_address = subprocess.getoutput("hostname -I");
-
-        return ip_address
-        # queue = subprocess.Popen('hostname -I', shell=True, stdout=subprocess.PIPE).communicate()[0]
+        host_name = socket.gethostname()
+        host_ip = socket.gethostbyname(host_name)
+        return socket.gethostbyname(host_name)
 
     def _show_gohome_modal(self, *args, **kwargs):
         if self.root.current in ['home', 'pay']:

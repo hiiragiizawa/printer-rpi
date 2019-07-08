@@ -93,7 +93,7 @@ class QrGuide(Screen):
             Logger.info('get file info, code: ' + str(self.code))
             req = requests.get(App.get_running_app().api_host + '/file/booknumber?bookNumber=' + self.code)
             res = req.json()
-            Logger.info(res)
+            # Logger.info(res)
 
             if res['errcode'] != 0:
                 self._show_error(str(res['errcode']))

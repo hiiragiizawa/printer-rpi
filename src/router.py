@@ -17,7 +17,6 @@ import uuid
 
 from requests.packages.urllib3.util import Retry
 from requests.adapters import HTTPAdapter
-from requests import Session, exceptions
 
 from src.home import Home
 from src.bookingcode import BookingCode
@@ -114,8 +113,13 @@ class PrinterApp(App):
 
     def rest_get(self, api):
         Logger.info('REST GET: ' + self.api_host + '/' + api)
-        ses = Session()
-        retries = Retry(total=6, backoff_factor=1, connect=5, status=3, status_forcelist=[400, 401, 404, 500, 501, 502])
+        ses = requests.Session()
+        retries = Retry(
+            total = 3,
+            read = 3,
+            connect = 5,
+            backoff_factor = 0.3,
+        )
         ses.mount("https://", HTTPAdapter(max_retries=retries))
         ses = requests.get(self.api_host + '/' + api)
         Logger.info('RESPONSE: ' + ses.text);

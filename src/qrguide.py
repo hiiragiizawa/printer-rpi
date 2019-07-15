@@ -91,7 +91,7 @@ class QrGuide(Screen):
         try:
             res = App.get_running_app().rest_get('file/booknumber?bookNumber=' + self.code)
             if res['errcode'] != 0:
-                self._show_error(str(res['errcode']))
+                self._show_error('Invalid Code')
             else:
 
                 return res['data']

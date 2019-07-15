@@ -5,7 +5,3 @@ class Home(Screen):
 
     def __init__(self, **kwargs):
         super(Home, self).__init__(**kwargs)
-        self.demo()
-
-    def demo(self):
-        print("hello")

@@ -12,7 +12,6 @@ import subprocess
 import requests
 import sys
 import json
-import socket
 import uuid
 
 
@@ -95,21 +94,11 @@ class PrinterApp(App):
 
     def _get_mac_address(self):
         mac_address = ':'.join(['{:02x}'.format((uuid.getnode() >> i) & 0xff) for i in range(0,8*6,8)][::-1])
-
-        # if Path('/sys/class/net/eth0/address').exists():
-        #     with open('/sys/class/net/eth0/address', 'r') as file:
-        #         mac_address = file.read()[0:17]
-        # elif Path('/sys/class/net/eth1/address').exists():
-        #     with open('/sys/class/net/eth1/address', 'r') as file:
-        #         mac_address = file.read()[0:17]
-        # else:
-        #     mac_address = 'read mac error'
         return mac_address
 
     def _get_ip(self):
-        host_name = socket.gethostname()
-        host_ip = socket.gethostbyname(host_name)
-        return host_ip
+        ip_address = subprocess.getoutput("hostname -I");
+        return ip_address
 
     def _show_gohome_modal(self, *args, **kwargs):
         if self.root.current in ['home', 'pay']:

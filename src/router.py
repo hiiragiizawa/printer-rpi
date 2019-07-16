@@ -129,7 +129,11 @@ class PrinterApp(App):
         Logger.info('REST POST: ' + self.api_host + '/' + api)
         Logger.info('DATA: ' + str(data))
         ses = Session()
-        retries = Retry(total=6, backoff_factor=1, connect=5, status=3, status_forcelist=[400, 401, 404, 500, 501, 502])
+        retries = Retry(
+            total = 3,
+            connect = 5,
+            backoff_factor = 0.3,
+        )
         ses.mount("https://", HTTPAdapter(max_retries=retries))
         ses = requests.post(self.api_host + '/' + api, data=json.dumps(data), headers={'content-type':'application/json'})
         Logger.info('RESPONSE: ' + ses.text);

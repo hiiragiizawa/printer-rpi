@@ -128,7 +128,7 @@ class PrinterApp(App):
     def rest_post(self, api, data):
         Logger.info('REST POST: ' + self.api_host + '/' + api)
         Logger.info('DATA: ' + str(data))
-        ses = Session()
+        ses = requests.Session()
         retries = Retry(
             total = 3,
             connect = 5,

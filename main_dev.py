@@ -3,7 +3,7 @@ os.environ['KIVY_GL_BACKEND'] = 'gl'
 
 # use local config
 from kivy.config import Config
-Config.read('settings.ini')
+Config.read('settings.dev.ini')
 Config.write()
 
 # set background color

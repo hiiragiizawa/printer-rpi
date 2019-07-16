@@ -22,12 +22,12 @@ class UsbGuide(Screen):
         super(UsbGuide, self).__init__(**kwargs)
 
     def _scan_udisk(self, *args):
-        letters = sh('ls -a /media/pi')
+        letters = sh('ls -a /media/usb0')
         letter_list = letters.split('\n')
         letter_list = list(filter(None, letter_list))
         last_letter = letter_list[-1]
         if last_letter not in ['.', '..']:
-            App.get_running_app().udisk_path = '/media/usb/' + last_letter
+            App.get_running_app().udisk_path = '/media/usb0/' + last_letter
             self.manager.current = 'usb'
             return
 

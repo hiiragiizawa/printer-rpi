@@ -86,3 +86,13 @@ scp -r * pi@192.168.1.8:/home/pi/printer-rpi
 ```
 git pull https://github.com/hiiragiizawa/printer-rpi.git
 ```
+
+
+```
+nano /etc/rc.local
+
+cd /var/app/current/printer-rpi
+/usr/bin/python3 main.py
+
+
+```

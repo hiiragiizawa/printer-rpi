@@ -1,12 +1,5 @@
 ### used in Raspberry Pi3 B+
 
-### dependence
-* python3.7
-* kivy1.10.1
-* pdf2image
-* requests
-* PyPDF3
-
 ### hardware
 * Raspberry Pi 3B+
 * RASPBIAN STRETCH WITH DESKTOP AND RECOMMENDED SOFTWARE

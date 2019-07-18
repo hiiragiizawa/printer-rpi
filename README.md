@@ -18,7 +18,6 @@
 ```
 $ apt-get update
 $ apt-get install libreoffice-writer libreoffice-calc libreoffice-impress -y
-$ apt-get install cups -y
 $ apt-get install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev \
    pkg-config libgl1-mesa-dev libgles2-mesa-dev \
    python-setuptools libgstreamer1.0-dev git-core \
@@ -29,13 +28,26 @@ $ apt-get install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-de
 
 $ python3 -m pip install cython==0.28.2 pillow setuptools
 $ python3 -m pip install pdf2image PyPDF3 requests
-$ python3 -m pip install https://github.com/kivy/kivy/archive/master.zip
+$ python3 -m pip install https://github.com/kivy/kivy/archive/1.11.1.zip
 
 
 $ mkdir /var/app
 $ cd /var/app/
 $ git clone https://github.com/hiiragiizawa/printer-rpi.git
 
+$ nano /etc/rc.local
+
+cd /var/app/printer-rpi
+/usr/bin/python3 main.py
+```
+
+### setting up cups
+
+```
+$ apt-get install cups -y
+$ usermod -a -G lpadmin pi
+
+localhost:631
 
 ```
 

@@ -8,7 +8,7 @@
 * PyPDF3
 
 ### hardware
-* Pi3 b+
+* Raspberry Pi 3B+
 * RASPBIAN STRETCH WITH DESKTOP AND RECOMMENDED SOFTWARE
 * 4.14
 * release date 2018-11-13
@@ -23,22 +23,16 @@ $ apt-get install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-de
    python-setuptools libgstreamer1.0-dev git-core \
    gstreamer1.0-plugins-{bad,base,good,ugly} \
    gstreamer1.0-{omx,alsa} python-dev libmtdev-dev \
-   xclip xsel libjpeg-dev -y
+   xclip xsel libjpeg-dev zlib1g-dev doppler-utils -y
 
 
 $ python3 -m pip install cython==0.28.2 pillow setuptools
 $ python3 -m pip install pdf2image PyPDF3 requests
 $ python3 -m pip install https://github.com/kivy/kivy/archive/1.11.1.zip
 
-
 $ mkdir /var/app
 $ cd /var/app/
 $ git clone https://github.com/hiiragiizawa/printer-rpi.git
-
-$ nano /etc/rc.local
-
-cd /var/app/printer-rpi
-/usr/bin/python3 main.py
 ```
 
 ### setting up cups
@@ -47,91 +41,26 @@ cd /var/app/printer-rpi
 $ apt-get install cups -y
 $ usermod -a -G lpadmin pi
 
+lp -n 1 README.md
+
+```
+
 localhost:631
 
+Administration
+1. Set Default Options
+2. Set As Server Default
+
+### Configuring App Startup
 ```
-
-
-#### prepare env
-##### 换源（国内必须换） 换源前也可备份下原来的文件
-
+$ nano /etc/rc.local
 ```
-    sudo sed -i 's#://raspbian.raspberrypi.org#s://mirrors.tuna.tsinghua.edu.cn/raspbian#g' /etc/apt/sources.list
-    sudo sed -i 's#://archive.raspberrypi.org/debian#s://mirrors.tuna.tsinghua.edu.cn/raspberrypi#g' /etc/apt/sources.list.d/raspi.list
-```
-##### 安装python3.7
-```
-    sudo apt-get update
-    sudo apt-get install -y build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev
-
-    wget https://www.python.org/ftp/python/3.7.0/Python-3.7.0.tar.xz
-
-    tar xf Python-3.7.0.tar.xz
-
-    cd Python-3.7.0
-
-    ./configure --prefix=/usr/local/opt/python-3.7.0
-
-    make -j 4
-
-    sudo make altinstall
-
-    sudo ln -s /usr/local/opt/python-3.7.0/bin/pydoc3.7 /usr/bin/pydoc3.7
-    sudo ln -s /usr/local/opt/python-3.7.0/bin/python3.7 /usr/bin/python3.7
-    sudo ln -s /usr/local/opt/python-3.7.0/bin/python3.7m /usr/bin/python3.7m
-    sudo ln -s /usr/local/opt/python-3.7.0/bin/pyvenv-3.7 /usr/bin/pyvenv-3.7
-    sudo ln -s /usr/local/opt/python-3.7.0/bin/pip3.7 /usr/bin/pip3.7
-
-    sudo pip3.7 install --upgrade pip
-```
-##### 安装树莓派环境
-```
-    sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev pkg-config libgl1-mesa-dev libgles2-mesa-dev python3-setuptools libgstreamer1.0-dev git-core gstreamer1.0-plugins-{bad,base,good,ugly} gstreamer1.0-{omx,alsa} python3-dev libmtdev-dev xclip xsel
-
-    sudo pip3.7 install Cython
-
-    sudo pip3.7 install git+https://github.com/kivy/kivy.git@stable-1.10
-```
-##### 安装第三方依赖包
-```
-    sudo apt-get update
-    sudo apt-get install doppler-utils  // pdf2image依赖
-    sudo apt-get install libjpeg-dev zlib1g-dev  // pillow依赖
-    sudo pip3.7 install pdf2image
-    sudo pip3.7 install requests
-```
-##### 安装python依赖包
-```
-    sudo apt-get update
-    sudo apt-get install doppler-utils
-    sudo apt-get install libjpeg-dev zlib1g-dev
-    sudo pip3.7 install pdf2image
-    sudo pip3.7 install requests
-    sudo pip3.7 install PyPDF3
-```
-
-### 运行程序
-```
-    cd app_path
-    python3.7 main.py
-```
-
-
-Deploy
-
-
-scp -r * pi@192.168.1.8:/home/pi/printer-rpi
-
-```
-git pull https://github.com/hiiragiizawa/printer-rpi.git
-```
-
-
-```
-nano /etc/rc.local
-
-cd /var/app/current/printer-rpi
+cd /var/app/printer-rpi
 /usr/bin/python3 main.py
 
 
+
+### Start x11 Service
+```
+$ startx
 ```

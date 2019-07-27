@@ -76,6 +76,7 @@ class PrinterApp(App):
         self.ip_address = self._get_ip()
         config = configparser.ConfigParser()
         try:
+            update = subprocess.getoutput("git -C /var/app/printer-rpi pull");
             config.read('config.ini')
             self.api_host = config['API']['HOST']
             self.api_version = config['API']['VERSION']
@@ -98,6 +99,7 @@ class PrinterApp(App):
 
     def _get_ip(self):
         ip_address = subprocess.getoutput("hostname -I");
+        git -C /var/app/printer-rpi pull
         return ip_address
 
     def _show_gohome_modal(self, *args, **kwargs):

@@ -57,3 +57,9 @@ cd /var/app/printer-rpi
 ```
 $ startx
 ```
+
+
+
+```
+git -C /var/app/printer-rpi pull
+```

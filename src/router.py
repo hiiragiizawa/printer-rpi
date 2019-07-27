@@ -84,10 +84,10 @@ class PrinterApp(App):
             self.api_version = '0.0'
 
         try:
-            subprocess.getoutput("git -C /var/app/printer-rpi reset --hard", shell=True, check=True)
-            subprocess.getoutput("git -C /var/app/printer-rpi pull", shell=True, check=True)
+            git_reset = subprocess.getoutput("git -C /var/app/printer-rpi reset --hard", shell=True, check=True)
+            git_pull = subprocess.getoutput("git -C /var/app/printer-rpi pull", shell=True, check=True)
         except Exception:
-            Logger.info('UPDATED: failed')
+            Logger.info('UPDATED: failed' + git_reset + git_pull)
             Logger.info(Exception)
 
 

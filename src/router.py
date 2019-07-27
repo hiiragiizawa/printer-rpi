@@ -81,6 +81,7 @@ class PrinterApp(App):
             self.api_version = config['API']['VERSION']
         except Exception:
             self.api_host = 'https://remi.print4u.com.my'
+            self.api_version = '0.0'
 
     def build(self):
         return Router(transition=NoTransition())
@@ -96,6 +97,7 @@ class PrinterApp(App):
         return mac_address
 
     def _get_ip(self):
+        ip_address = subprocess.getoutput("hostname -I");
         ip_address = subprocess.getoutput("hostname -I");
         return ip_address
 

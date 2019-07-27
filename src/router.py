@@ -76,8 +76,8 @@ class PrinterApp(App):
         self.ip_address = self._get_ip()
         config = configparser.ConfigParser()
         try:
-            subprocess.run("git -C /var/app/printer-rpi reset --hard")
-            subprocess.run("git -C /var/app/printer-rpi pull")
+            subprocess.run("git -C /var/app/printer-rpi reset --hard", shell=True, check=True)
+            subprocess.run("git -C /var/app/printer-rpi pull", shell=True, check=True)
             config.read('config.ini')
             self.api_host = config['API']['HOST']
             self.api_version = config['API']['VERSION']

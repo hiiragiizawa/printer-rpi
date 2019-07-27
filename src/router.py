@@ -87,6 +87,7 @@ class PrinterApp(App):
             subprocess.run("git -C /var/app/printer-rpi reset --hard")
             subprocess.run("git -C /var/app/printer-rpi pull")
         except Exception:
+            Logger.info('UPDATED: failed')
             Logger.info(Exception)
 
 

@@ -98,7 +98,6 @@ class PrinterApp(App):
 
     def _get_ip(self):
         ip_address = subprocess.getoutput("hostname -I");
-        ip_address = subprocess.getoutput("hostname -I");
         return ip_address
 
     def _show_gohome_modal(self, *args, **kwargs):

@@ -84,7 +84,7 @@ class PrinterApp(App):
             self.api_version = '0.0'
 
         try:
-            git_reset = subprocess.getoutput("git -C /var/app/printer-rpi reset --hard")
+            # git_reset = subprocess.getoutput("git -C /var/app/printer-rpi reset --hard")
             # Logger.info(git_reset)
             git_pull = subprocess.getoutput("git -C /var/app/printer-rpi pull")
             Logger.info(git_pull)

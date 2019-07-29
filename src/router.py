@@ -97,7 +97,6 @@ class PrinterApp(App):
         return Router(transition=NoTransition())
 
     def on_start(self):
-        print('start')
         self.homemodal = HomeModal()
         self.root_schedule = Clock.schedule_once(self._show_gohome_modal, 60)
         Window.bind(on_touch_down=self._listen_screen_touch)

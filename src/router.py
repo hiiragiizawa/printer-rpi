@@ -83,14 +83,14 @@ class PrinterApp(App):
             self.api_host = 'https://remi.print4u.com.my'
             self.api_version = '0.0'
 
-        try:
-            # git_reset = subprocess.getoutput("git -C /var/app/printer-rpi reset --hard")
-            # Logger.info(git_reset)
-            git_pull = subprocess.getoutput("git -C /var/app/printer-rpi pull")
-            Logger.info(git_pull)
-        except Exception:
-            Logger.info('UPDATED: failed')
-            Logger.info(Exception)
+        # try:
+        #     # git_reset = subprocess.getoutput("git -C /var/app/printer-rpi reset --hard")
+        #     # Logger.info(git_reset)
+        #     # git_pull = subprocess.getoutput("git -C /var/app/printer-rpi pull")
+        #     Logger.info(git_pull)
+        # except Exception:
+        #     Logger.info('UPDATED: failed')
+        #     Logger.info(Exception)
 
 
     def build(self):

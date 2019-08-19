@@ -48,9 +48,10 @@ Administration
 ```
 $ nano /etc/rc.local
 ```
+git -C /var/app/printer-rpi pull
+
 cd /var/app/printer-rpi
 /usr/bin/python3 main.py
-
 
 
 ### Start x11 Service

@@ -38,31 +38,33 @@
         top: 120
         center_x: 400
 
-    # Button:
-    #     size_hint: None, None
-    #     size: 200, 200
-    #     pos: 300, 130
-    #     background_normal: ''
-    #     on_press: self.parent.on_select(1)
-    #     canvas:
-    #         Color:
-    #             rgba: .9, .9, .9, 1
-    #         Line:
-    #             rectangle: (300, 130, 200, 200)
-    #     Image:
-    #         size_hint: None, None
-    #         size: 180, 180
-    #         source: 'assets/boost-logo.png'
-    #         center: self.parent.center
-    # Label:
-    #     size_hint: None, None
-    #     size: 200, 20
-    #     text: 'Boost'
-    #     color: .42, .42, .42, 1
-    #     font_size: 18
-    #     line_height: 1
-    #     top: 120
-    #     center_x: 400
+    Button:
+        size_hint: None, None
+        size: 200, 200
+        pos: 70, 130
+        background_normal: ''
+        on_press: self.parent.on_select(1) if app.kiosk_mode == 'C' else 0
+        opacity: 1 if app.kiosk_mode == 'C' else 0
+        canvas:
+            Color:
+                rgba: .9, .9, .9, 1
+            Line:
+                rectangle: (70, 130, 200, 200)
+        Image:
+            size_hint: None, None
+            size: 180, 180
+            source: 'assets/corporate-pay.png'
+            center: self.parent.center
+    Label:
+        opacity: 1 if app.kiosk_mode == 'C' else 0
+        size_hint: None, None
+        size: 200, 20
+        text: 'Corporate Payment'
+        color: .42, .42, .42, 1
+        font_size: 18
+        line_height: 1
+        top: 120
+        center_x: 170
 
     # Button:
     #     size_hint: None, None

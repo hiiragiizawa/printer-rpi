@@ -79,9 +79,17 @@ class PrinterApp(App):
             config.read('config.ini')
             self.api_host = config['API']['HOST']
             self.api_version = config['API']['VERSION']
+
         except Exception:
             self.api_host = 'https://remi.print4u.com.my'
             self.api_version = '0.0'
+
+        try:
+            config.read('kiosk.ini')
+            self.kiosk_mode = config['CONFIG']['MODE']
+        except Exception:
+            self.kiosk_mode = 'S'
+
 
         # try:
         #     # git_reset = subprocess.getoutput("git -C /var/app/printer-rpi reset --hard")

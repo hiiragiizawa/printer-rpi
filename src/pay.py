@@ -17,8 +17,8 @@ from src.backarrow import BackArrow
 from src.loading import Loading
 from src.homemodal import HomeModal
 
-PAY_CHANNEL_NAMES = ['Sarawak Pay', 'Boost', 'Online Payment']
-PAY_CHANNEL_LOGOS = ['assets/sarawak-pay-logo.png', 'assets/boost-logo.png', 'assets/online-banking-logo.png']
+PAY_CHANNEL_NAMES = ['Sarawak Pay', 'Corporate Payment', 'Online Payment']
+PAY_CHANNEL_LOGOS = ['assets/sarawak-pay-logo.png', 'assets/corporate-pay.png', 'assets/online-banking-logo.png']
 
 class Pay(Screen):
     qrcode_url = StringProperty('')

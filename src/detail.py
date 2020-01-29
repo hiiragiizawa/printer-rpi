@@ -87,6 +87,7 @@ class Detail(Screen):
         app = App.get_running_app()
 
         file_fmt = app.file_info['name'].split('.')[-1].lower()
+
         # not_preview = True
         # not_preview = not_preview and (file_fmt not in ['jpg', 'png', 'pdf', 'jpeg'])
         # if not_preview and 'type' in app.file_info:
@@ -98,6 +99,7 @@ class Detail(Screen):
         path = 'tmp/download.data'
 
         # if the file is not images, transfer the first page to jpg file and save to tmp folder to preview
+
         if not file_fmt in ['jpg', 'png', 'jpeg']:
             with tempfile.TemporaryDirectory() as path1:
                 images_from_path = convert_from_path(path, dpi=50, output_folder=path1, last_page=1, fmt='jpg')
@@ -136,7 +138,7 @@ class Detail(Screen):
         subprocess.Popen('soffice --headless --convert-to pdf download.data', shell=True, cwd=cwd).wait()
 
         if not Path('tmp/download.pdf').exists():
-            self._show_warning('Convert file error')
+            self._show_warning('Unable to process the file,\nplease contact our customer support.')
             Clock.schedule_once(self._go_back, 3)
             return
 
@@ -156,8 +158,14 @@ class Detail(Screen):
         Logger.info('Page: ' + str(self.page_count))
 
     def pdf2page_count(self, path):
-        pdfFileObj = open(path, 'rb')
-        pdfReader = PyPDF3.PdfFileReader(pdfFileObj, strict=False)
+        try:
+            pdfFileObj = open(path, 'rb')
+            pdfReader = PyPDF3.PdfFileReader(pdfFileObj, strict=False)
+        except Exception as e:
+            self._show_warning('Unable to process the file,\nplease contact our customer support.')
+            Clock.schedule_once(self._go_back, 3)
+            return 1
+
         return pdfReader.numPages
 
     def confirm(self):

@@ -48,10 +48,9 @@ Administration
 ```
 $ nano /etc/rc.local
 ```
-git -C /var/app/printer-rpi pull
+git -C /var/app/printer-rpi pull --quiet || true
 
-cd /var/app/printer-rpi
-/usr/bin/python3 main.py
+/usr/bin/python3 /var/app/printer-rpi/main.py
 
 
 ### Start x11 Service
@@ -60,7 +59,7 @@ $ startx
 ```
 
 
-
+### API used
 ```
-git -C /var/app/printer-rpi pull
+
 ```

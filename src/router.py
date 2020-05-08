@@ -156,3 +156,15 @@ class PrinterApp(App):
         ses = requests.post(self.api_host + '/' + api, data=json.dumps(data), headers={'content-type':'application/json'})
         Logger.info('RESPONSE: ' + ses.text);
         return ses.json();
+
+    def fetchFile(self, file_url):
+        try:
+            with open('tmp/download.data', 'wb') as f:
+                file_url = file_url.replace('https', 'http', 1)
+                response = requests.get(file_url, timeout=15)
+                total_length = response.headers.get('content-length')
+                f.write(response.content)
+            return True
+        except Exception as e:
+            Logger.exception(e)
+            return False

@@ -67,7 +67,7 @@ class QrGuide(Screen):
         self.isRequesting = True
 
         if not self.code:
-            self._show_error('Invalid Code')
+            self._show_error('Invalid QR Code\nYou can try again by using booking number instead.')
             return
 
         self.loading.open()
@@ -84,35 +84,22 @@ class QrGuide(Screen):
         App.get_running_app().file_info = file_info
         file_url = file_info['fileUrl']
 
-        if self._download_file(file_url):
+        if App.get_running_app().fetchFile(file_url):
             self.manager.current = 'detail'
+            self.loading.dismiss()
+        else:
+            self._show_error('Network error, please try again later.')
 
     def _get_file_info(self):
         try:
             res = App.get_running_app().rest_get('file/booknumber?bookNumber=' + self.code)
             if res['errcode'] != 0:
-                self._show_error('Invalid Code')
+                self._show_error('Invalid QR Code\nYou can try again by using booking number instead.')
             else:
-
                 return res['data']
         except Exception as e:
             Logger.info("Network timeout, retry in 3s")
-            self._show_error('Connected Failed')
-
-    def _download_file(self, file_url):
-        try:
-            with open('tmp/download.data', 'wb') as f:
-
-                response = requests.get(file_url, timeout=15)
-                total_length = response.headers.get('content-length')
-
-                f.write(response.content)
-
-            self.loading.dismiss()
-            return True
-        except Exception as e:
-            Logger.exception(e)
-            self._show_error('Download Error')
+            self._show_error('Network error, please try again later.')
 
     def _show_error(self, msg):
         Logger.info(msg)

@@ -4,8 +4,8 @@
 * 4.14
 * release date 2018-11-13
 
-## Environment
-### Preparing Environment for Raspbian System to install Print4U software
+## System Environment
+#### Preparing Environment for Raspbian System to install Print4U software
 ```
 $ apt-get update
 $ apt-get install libreoffice-writer libreoffice-calc libreoffice-impress -y
@@ -22,7 +22,7 @@ $ python3 -m pip install pdf2image PyPDF3 requests
 $ python3 -m pip install https://github.com/kivy/kivy/archive/1.11.1.zip
 ```
 
-### Setup installation directory and settings
+#### Setup installation directory and settings
 ```
 $ mkdir /var/app
 $ cd /var/app/
@@ -31,7 +31,7 @@ $ cd /var/app/printer-rpi
 $ cp settings.sample.ini settings.ini
 ```
 
-### Setup CUPS for printing
+#### Setup CUPS for printing
 ```
 $ apt-get install cups -y
 $ usermod -a -G lpadmin pi
@@ -48,7 +48,7 @@ Administration
 
 
 ## Preparing Print4U System
-### Configuring App Startup
+#### Configuring App Startup
 
 Command for opening system startup file
 ```
@@ -60,15 +60,20 @@ Add the following command to rc.local file to startup Print4U software on system
 /usr/bin/python3 /var/app/printer-rpi/main.py
 ```
 
-### Manual Update for Print4U Software
+#### Manual Update for Print4U Software
 ```
-$ sudo apt-get install apt-transport-https ca-certificates -y
-$ sudo update-ca-certificates
-
 $ git -C /var/app/printer-rpi pull
 ```
 
-### Start x11 Service (Raspbian GUI)
+
+## Other Useful Command
+#### Start x11 Service (Raspbian GUI)
 ```
 $ startx
+```
+
+#### Update System Certificate
+```
+$ sudo apt-get install apt-transport-https ca-certificates -y
+$ sudo update-ca-certificates
 ```

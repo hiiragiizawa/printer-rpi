@@ -1,12 +1,11 @@
-### used in Raspberry Pi3 B+
-
-### Hardware Requirement
+## Hardware Requirement
 * Raspberry Pi 3B+
 * RASPBIAN STRETCH WITH DESKTOP AND RECOMMENDED SOFTWARE
 * 4.14
 * release date 2018-11-13
 
-### Preparing Environment for RPI 3B+ to install Print4U software
+## Environment
+### Preparing Environment for Raspbian System to install Print4U software
 ```
 $ apt-get update
 $ apt-get install libreoffice-writer libreoffice-calc libreoffice-impress -y
@@ -48,6 +47,7 @@ Administration
 2. Set As Server Default
 
 
+## Preparing Print4U System
 ### Configuring App Startup
 
 Command for opening system startup file
@@ -62,10 +62,10 @@ Add the following command to rc.local file to startup Print4U software on system
 
 ### Manual Update for Print4U Software
 ```
-sudo apt-get install apt-transport-https ca-certificates -y
-sudo update-ca-certificates
+$ sudo apt-get install apt-transport-https ca-certificates -y
+$ sudo update-ca-certificates
 
-git -C /var/app/printer-rpi pull
+$ git -C /var/app/printer-rpi pull
 ```
 
 ### Start x11 Service (Raspbian GUI)

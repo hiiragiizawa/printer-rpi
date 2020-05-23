@@ -1,13 +1,12 @@
 ### used in Raspberry Pi3 B+
 
-### hardware
+### Hardware Requirement
 * Raspberry Pi 3B+
 * RASPBIAN STRETCH WITH DESKTOP AND RECOMMENDED SOFTWARE
 * 4.14
 * release date 2018-11-13
 
-
-### preparing for RPI 3B+
+### Preparing Environment for RPI 3B+ to install Print4U software
 ```
 $ apt-get update
 $ apt-get install libreoffice-writer libreoffice-calc libreoffice-impress -y
@@ -22,14 +21,18 @@ $ apt-get install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-de
 $ python3 -m pip install cython==0.28.2 pillow setuptools
 $ python3 -m pip install pdf2image PyPDF3 requests
 $ python3 -m pip install https://github.com/kivy/kivy/archive/1.11.1.zip
+```
 
+### Setup installation directory and settings
+```
 $ mkdir /var/app
 $ cd /var/app/
 $ git clone https://github.com/hiiragiizawa/printer-rpi.git
+$ cd /var/app/printer-rpi
+$ cp settings.sample.ini settings.ini
 ```
 
-### setting up cups
-
+### Setup CUPS for printing
 ```
 $ apt-get install cups -y
 $ usermod -a -G lpadmin pi
@@ -37,29 +40,35 @@ $ usermod -a -G lpadmin pi
 lp -n 1 README.md
 
 ```
-
-localhost:631
+#### Steps for configuring CUPS from website
+URL: localhost:631
 
 Administration
 1. Set Default Options
 2. Set As Server Default
 
+
 ### Configuring App Startup
+
+Command for opening system startup file
 ```
 $ nano /etc/rc.local
 ```
-git -C /var/app/printer-rpi pull --quiet || true
 
+Add the following command to rc.local file to startup Print4U software on system startup
+```
 /usr/bin/python3 /var/app/printer-rpi/main.py
+```
 
+### Manual Update for Print4U Software
+```
+sudo apt-get install apt-transport-https ca-certificates -y
+sudo update-ca-certificates
 
-### Start x11 Service
+git -C /var/app/printer-rpi pull
+```
+
+### Start x11 Service (Raspbian GUI)
 ```
 $ startx
-```
-
-
-### API used
-```
-
 ```
